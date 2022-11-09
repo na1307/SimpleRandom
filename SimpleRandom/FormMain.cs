@@ -1,4 +1,4 @@
-namespace RandomForms;
+namespace SimpleRandom;
 
 public partial class FormMain : Form {
     private List<int>? ints;
@@ -47,7 +47,7 @@ public partial class FormMain : Form {
             listBox1.Items.Add(value);
             listBox1.SelectedIndex = listBox1.Items.Count - 1;
             listBox1.SelectedIndex = -1;
-            if (ints != null) ints.Add(value);
+            ints?.Add(value);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿namespace RandomForms;
+﻿namespace SimpleRandom;
 
 partial class FormMain {
     /// <summary>

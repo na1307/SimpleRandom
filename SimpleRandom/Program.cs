@@ -1,4 +1,4 @@
-namespace RandomForms;
+namespace SimpleRandom;
 
 internal static class Program {
     /// <summary>

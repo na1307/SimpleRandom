@@ -5,7 +5,7 @@ public partial class FormMain {
 
     public FormMain() => InitializeComponent();
 
-    private void button1_Click(object sender, EventArgs e) {
+    private async void button1_Click(object sender, EventArgs e) {
         if (!int.TryParse(startBox.Text, out var minValue) || !int.TryParse(endBox.Text, out var maxValue)) {
             ErrMsg("숫자가 아닌 문자열을 입력했거나 숫자가 너무 큽니다.");
             return;
@@ -37,13 +37,19 @@ public partial class FormMain {
         } else if (noDupNumbers.Count >= (maxValue - minValue)) {
             if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) init();
         } else {
-            int value;
+            button1.Enabled = false;
+            numlabel.Text = "뽑는 중...";
+            addNumber(await Task.Factory.StartNew(() => {
+                int value;
 
-            do {
-                value = Random.Shared.Next(minValue, maxValue);
-            } while (noDupNumbers.Contains(value));
+                do {
+                    value = Random.Shared.Next(minValue, maxValue);
+                } while (noDupNumbers.Contains(value));
 
-            addNumber(value);
+                return value;
+            }, TaskCreationOptions.LongRunning));
+            button1.Enabled = true;
+            button1.Focus();
         }
 
         void addNumber(int value) {
@@ -70,6 +76,8 @@ public partial class FormMain {
     private void button2_Click(object sender, EventArgs e) {
         numlabel.Text = null;
         listBox1.Items.Clear();
+        progressBar1.Maximum = 0;
+        progressBar1.Value = 0;
         if (noDupNumbers != null) noDupNumbers = null;
     }
 

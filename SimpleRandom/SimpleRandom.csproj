@@ -9,7 +9,11 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <NoWin32Manifest>true</NoWin32Manifest>
     <IsPublishable>False</IsPublishable>
-    <Authors>na1307</Authors>
+    <Company>Bluehill</Company>
+    <Copyright>Copyright © Bluehill 2022</Copyright>
+    <AssemblyVersion>1</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <Version>1.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="BluehillShared.ErrDialogForms" Static="true" />

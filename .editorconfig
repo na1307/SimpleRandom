@@ -104,6 +104,7 @@ csharp_style_conditional_delegate_call = true
 # 한정자 기본 설정
 csharp_prefer_static_local_function = true
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+csharp_style_prefer_readonly_struct = true
 
 # 코드 블록 기본 설정
 csharp_prefer_braces = false
@@ -124,8 +125,8 @@ csharp_style_prefer_range_operator = true
 csharp_style_prefer_tuple_swap = true
 csharp_style_prefer_utf8_string_literals = true
 csharp_style_throw_expression = true
-csharp_style_unused_value_assignment_preference = unused_local_variable
-csharp_style_unused_value_expression_statement_preference = unused_local_variable
+csharp_style_unused_value_assignment_preference = discard_variable
+csharp_style_unused_value_expression_statement_preference = discard_variable
 
 # 'using' 지시문 기본 설정
 csharp_using_directive_placement = outside_namespace

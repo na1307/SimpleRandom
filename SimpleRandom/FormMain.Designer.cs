@@ -1,6 +1,6 @@
 ﻿namespace SimpleRandom;
 
-partial class FormMain {
+partial class FormMain : Form {
     /// <summary>
     ///  Required designer variable.
     /// </summary>
@@ -33,6 +33,7 @@ partial class FormMain {
             this.numlabel = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // label1
@@ -93,9 +94,9 @@ partial class FormMain {
             // numlabel
             // 
             this.numlabel.Font = new System.Drawing.Font("맑은 고딕", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.numlabel.Location = new System.Drawing.Point(12, 94);
+            this.numlabel.Location = new System.Drawing.Point(12, 110);
             this.numlabel.Name = "numlabel";
-            this.numlabel.Size = new System.Drawing.Size(460, 100);
+            this.numlabel.Size = new System.Drawing.Size(460, 84);
             this.numlabel.TabIndex = 6;
             this.numlabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -118,10 +119,19 @@ partial class FormMain {
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 97);
+            this.progressBar1.Maximum = 0;
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(460, 10);
+            this.progressBar1.TabIndex = 9;
+            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(484, 461);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.numlabel);
@@ -151,4 +161,5 @@ partial class FormMain {
     private Label numlabel;
     private ListBox listBox1;
     private Button button2;
+    private ProgressBar progressBar1;
 }

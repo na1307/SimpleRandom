@@ -1,7 +1,7 @@
 namespace SimpleRandom;
 
-public partial class FormMain : Form {
-    private List<int>? ints;
+public partial class FormMain {
+    private List<int>? noDupNumbers;
 
     public FormMain() => InitializeComponent();
 
@@ -24,37 +24,53 @@ public partial class FormMain : Form {
         maxValue++;
 
         if (!checkBox1.Checked) {
-            ints = null;
-            add(Random.Shared.Next(minValue, maxValue));
-        } else {
-            if (ints == null || ints.Capacity != (maxValue - minValue) || ints.Count >= (maxValue - minValue)) {
+            if (noDupNumbers != null) {
+                noDupNumbers = null;
                 listBox1.Items.Clear();
-                ints = new(maxValue - minValue);
-                add(Random.Shared.Next(minValue, maxValue));
-            } else {
-                int value;
-
-                do {
-                    value = Random.Shared.Next(minValue, maxValue);
-                } while (ints.Contains(value));
-
-                add(value);
+                progressBar1.Maximum = 0;
+                progressBar1.Value = 0;
             }
+
+            addNumber(Random.Shared.Next(minValue, maxValue));
+        } else if (noDupNumbers == null || noDupNumbers.Capacity != (maxValue - minValue)) {
+            init();
+        } else if (noDupNumbers.Count >= (maxValue - minValue)) {
+            if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) init();
+        } else {
+            int value;
+
+            do {
+                value = Random.Shared.Next(minValue, maxValue);
+            } while (noDupNumbers.Contains(value));
+
+            addNumber(value);
         }
 
-        void add(int value) {
+        void addNumber(int value) {
             numlabel.Text = value.ToString();
             listBox1.Items.Add(value);
             listBox1.SelectedIndex = listBox1.Items.Count - 1;
             listBox1.SelectedIndex = -1;
-            ints?.Add(value);
+
+            if (noDupNumbers != null) {
+                noDupNumbers.Add(value);
+                progressBar1.Value++;
+            }
+        }
+
+        void init() {
+            listBox1.Items.Clear();
+            noDupNumbers = new(maxValue - minValue);
+            progressBar1.Maximum = noDupNumbers.Capacity;
+            progressBar1.Value = 0;
+            addNumber(Random.Shared.Next(minValue, maxValue));
         }
     }
 
     private void button2_Click(object sender, EventArgs e) {
         numlabel.Text = null;
         listBox1.Items.Clear();
-        if (ints != null) ints = null;
+        if (noDupNumbers != null) noDupNumbers = null;
     }
 
     private void textBox_TextChanged(object sender, EventArgs e) => button1.Enabled = !string.IsNullOrWhiteSpace(startBox.Text) && !string.IsNullOrWhiteSpace(endBox.Text);

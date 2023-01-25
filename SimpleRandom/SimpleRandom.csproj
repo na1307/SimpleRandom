@@ -16,8 +16,9 @@
     <Version>1.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <Using Include="BluehillShared.ErrDialogForms" Static="true" />
+    <Using Include="Bluehill.ErrDialogForms" Static="true" />
   </ItemGroup>
-  <Import Project="..\BluehillShared\BluehillShared\BluehillShared.projitems" Label="Shared" />
-  <Import Project="..\BluehillShared\BluehillShared.Forms\BluehillShared.Forms.projitems" Label="Shared" />
+  <ItemGroup>
+    <PackageReference Include="Bluehill.Forms" Version="0.*"/>
+  </ItemGroup>
 </Project>

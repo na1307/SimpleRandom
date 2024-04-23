@@ -16,4 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Bluehill.Forms" Version="0.3.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleRandom\SimpleRandom.csproj" />
+  </ItemGroup>
 </Project>

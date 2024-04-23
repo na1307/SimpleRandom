@@ -1,7 +1,7 @@
 namespace SimpleRandom.Forms;
 
 public partial class FormMain {
-    private List<int>? noDupNumbers;
+    private NoDupNumberProvider? provider;
 
     public FormMain() => InitializeComponent();
 
@@ -24,32 +24,32 @@ public partial class FormMain {
         maxValue++;
 
         if (!checkBox1.Checked) {
-            if (noDupNumbers != null) {
-                noDupNumbers = null;
+            if (provider != null) {
+                provider = null;
                 listBox1.Items.Clear();
                 progressBar1.Maximum = 0;
                 progressBar1.Value = 0;
             }
 
             addNumber(Random.Shared.Next(minValue, maxValue));
-        } else if (noDupNumbers == null || noDupNumbers.Capacity != (maxValue - minValue)) {
+        } else if (provider == null || provider.Capacity != (maxValue - minValue)) {
             noDupInit();
-        } else if (noDupNumbers.Count >= (maxValue - minValue)) {
-            if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
-                noDupInit();
-            }
+            addNumber(await provider!.GetNumber());
         } else {
             button1.Enabled = false;
             numlabel.Text = "뽑는 중...";
-            addNumber(await Task.Factory.StartNew(() => {
-                int value;
 
-                do {
-                    value = Random.Shared.Next(minValue, maxValue);
-                } while (noDupNumbers.Contains(value));
+            try {
+                addNumber(await provider.GetNumber());
+            } catch (NothingToGetException) {
+                numlabel.Text = string.Empty;
 
-                return value;
-            }, TaskCreationOptions.LongRunning));
+                if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
+                    noDupInit();
+                    addNumber(await provider.GetNumber());
+                }
+            }
+
             button1.Enabled = true;
             button1.Focus();
         }
@@ -60,18 +60,16 @@ public partial class FormMain {
             listBox1.SelectedIndex = listBox1.Items.Count - 1;
             listBox1.SelectedIndex = -1;
 
-            if (noDupNumbers != null) {
-                noDupNumbers.Add(value);
+            if (provider != null) {
                 progressBar1.Value++;
             }
         }
 
         void noDupInit() {
             listBox1.Items.Clear();
-            noDupNumbers = new(maxValue - minValue);
-            progressBar1.Maximum = noDupNumbers.Capacity;
+            provider = new(minValue, maxValue);
+            progressBar1.Maximum = provider.Capacity;
             progressBar1.Value = 0;
-            addNumber(Random.Shared.Next(minValue, maxValue));
         }
     }
 
@@ -80,8 +78,10 @@ public partial class FormMain {
         listBox1.Items.Clear();
         progressBar1.Maximum = 0;
         progressBar1.Value = 0;
-        noDupNumbers = null;
+        provider = null;
     }
 
-    private void textBox_TextChanged(object sender, EventArgs e) => button1.Enabled = !string.IsNullOrWhiteSpace(startBox.Text) && !string.IsNullOrWhiteSpace(endBox.Text);
+    private void textBox_TextChanged(object sender, EventArgs e) =>
+        // 최소값과 최대값이 모두 비어있지 않을 때만
+        button1.Enabled = !string.IsNullOrWhiteSpace(startBox.Text) && !string.IsNullOrWhiteSpace(endBox.Text);
 }

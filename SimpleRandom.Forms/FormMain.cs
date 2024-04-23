@@ -1,4 +1,4 @@
-namespace SimpleRandom;
+namespace SimpleRandom.Forms;
 
 public partial class FormMain {
     private List<int>? noDupNumbers;
@@ -33,9 +33,11 @@ public partial class FormMain {
 
             addNumber(Random.Shared.Next(minValue, maxValue));
         } else if (noDupNumbers == null || noDupNumbers.Capacity != (maxValue - minValue)) {
-            init();
+            noDupInit();
         } else if (noDupNumbers.Count >= (maxValue - minValue)) {
-            if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) init();
+            if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
+                noDupInit();
+            }
         } else {
             button1.Enabled = false;
             numlabel.Text = "뽑는 중...";
@@ -64,7 +66,7 @@ public partial class FormMain {
             }
         }
 
-        void init() {
+        void noDupInit() {
             listBox1.Items.Clear();
             noDupNumbers = new(maxValue - minValue);
             progressBar1.Maximum = noDupNumbers.Capacity;
@@ -78,7 +80,7 @@ public partial class FormMain {
         listBox1.Items.Clear();
         progressBar1.Maximum = 0;
         progressBar1.Value = 0;
-        if (noDupNumbers != null) noDupNumbers = null;
+        noDupNumbers = null;
     }
 
     private void textBox_TextChanged(object sender, EventArgs e) => button1.Enabled = !string.IsNullOrWhiteSpace(startBox.Text) && !string.IsNullOrWhiteSpace(endBox.Text);

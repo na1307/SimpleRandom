@@ -1,4 +1,4 @@
-﻿namespace SimpleRandom;
+﻿namespace SimpleRandom.Forms;
 
 partial class FormMain : Form {
     /// <summary>

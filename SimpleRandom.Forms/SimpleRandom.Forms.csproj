@@ -1,16 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <WarningsAsErrors>Nullable</WarningsAsErrors>
     <NoWin32Manifest>true</NoWin32Manifest>
     <IsPublishable>False</IsPublishable>
-    <Company>Bluehill</Company>
-    <Copyright>Copyright © Bluehill 2022</Copyright>
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <Version>1.0</Version>
@@ -19,6 +14,6 @@
     <Using Include="Bluehill.ErrDialogForms" Static="true" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Bluehill.Forms" Version="0.*"/>
+    <PackageReference Include="Bluehill.Forms" Version="0.3.0" />
   </ItemGroup>
 </Project>

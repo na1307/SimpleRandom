@@ -33,8 +33,7 @@ public partial class FormMain {
 
             addNumber(Random.Shared.Next(minValue, maxValue));
         } else if (provider == null || provider.Capacity != (maxValue - minValue)) {
-            noDupInit();
-            addNumber(await provider!.GetNumber());
+            await noDupInit();
         } else {
             button1.Enabled = false;
             numlabel.Text = "뽑는 중...";
@@ -45,8 +44,7 @@ public partial class FormMain {
                 numlabel.Text = string.Empty;
 
                 if (MessageBox.Show("모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?", "알림", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
-                    noDupInit();
-                    addNumber(await provider.GetNumber());
+                    await noDupInit();
                 }
             }
 
@@ -65,11 +63,12 @@ public partial class FormMain {
             }
         }
 
-        void noDupInit() {
+        async Task noDupInit() {
             listBox1.Items.Clear();
             provider = new(minValue, maxValue);
             progressBar1.Maximum = provider.Capacity;
             progressBar1.Value = 0;
+            addNumber(await provider.GetNumber());
         }
     }
 

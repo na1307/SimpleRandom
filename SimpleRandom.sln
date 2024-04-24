@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleRandom", "SimpleRandom\SimpleRandom.csproj", "{9CAA4A80-A146-4953-B15C-335309C46802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleRandom", "SimpleRandom\SimpleRandom.csproj", "{9CAA4A80-A146-4953-B15C-335309C46802}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleRandom.Forms", "SimpleRandom.Forms\SimpleRandom.Forms.csproj", "{438F3F97-8F8F-444A-8500-DC83B9243A0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleRandom.Blazor", "SimpleRandom.Blazor\SimpleRandom.Blazor.csproj", "{39F58512-62D1-4584-8435-863ACEA3B74A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{438F3F97-8F8F-444A-8500-DC83B9243A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{438F3F97-8F8F-444A-8500-DC83B9243A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{438F3F97-8F8F-444A-8500-DC83B9243A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39F58512-62D1-4584-8435-863ACEA3B74A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39F58512-62D1-4584-8435-863ACEA3B74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39F58512-62D1-4584-8435-863ACEA3B74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39F58512-62D1-4584-8435-863ACEA3B74A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

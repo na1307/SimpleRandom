@@ -1,0 +1,56 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+
+<PageTitle>숫자 뽑기</PageTitle>
+
+<p>최소값: <InputNumber TValue="int" @bind-Value="minValue" /></p>
+<p>최대값: <InputNumber TValue="int" @bind-Value="maxValue" /></p>
+<p><InputCheckbox @bind-Value="noDup" /> 중복 없음</p>
+
+<div>
+    @if (minValue > maxValue) {
+        <div class="alert alert-danger">최소값은 최대값보다 클 수 없습니다.</div>
+    }
+</div>
+
+<div style="text-align: center;">
+    <button style="width: 800px;" class="btn btn-primary" @onclick="draw">뽑기</button>
+</div>
+
+<span style="font-size: 32pt;" class="d-flex justify-content-center">@value</span>
+
+@code {
+    private int minValue;
+    private int maxValue;
+    private int? value = null;
+    private bool noDup;
+    private NoDupNumberProvider? provider;
+
+    private async Task draw() {
+        if (minValue > maxValue) {
+            return;
+        }
+
+        var maxValue2 = maxValue + 1;
+
+        if (!noDup) {
+            provider = null;
+            value = Random.Shared.Next(minValue, maxValue2);
+        } else if (provider == null || provider.Capacity != (maxValue2 - minValue)) {
+            await noDupInit();
+        } else {
+            try {
+                value = await provider.GetNumber();
+            } catch (NothingToGetException) {
+                if (await JSRuntime.InvokeAsync<bool>("confirm", "모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?") == true) {
+                    await noDupInit();
+                }
+            }
+        }
+
+        async Task noDupInit() {
+            provider = new(minValue, maxValue2);
+            value = await provider!.GetNumber();
+        }
+    }
+}

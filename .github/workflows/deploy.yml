@@ -31,12 +31,11 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Restore dependencies
-        run: dotnet restore SimpleRandom.Blazor/SimpleRandom.Blazor.csproj
-      - name: Build
-        run: dotnet build SimpleRandom.Blazor/SimpleRandom.Blazor.csproj --no-restore -c Release
-      - name: Publish
-        run: dotnet publish SimpleRandom.Blazor/SimpleRandom.Blazor.csproj --no-build -c Release -o _out
+      - name: Prepare Blazor WASM for GitHub Pages
+        uses: na1307/blazor-github-pages@v1
+        with:
+          project-path: SimpleRandom.Blazor/SimpleRandom.Blazor.csproj
+          main-repo: false
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

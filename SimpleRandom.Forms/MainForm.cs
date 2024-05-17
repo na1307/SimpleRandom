@@ -1,9 +1,9 @@
 namespace SimpleRandom.Forms;
 
-public partial class FormMain {
+public partial class MainForm {
     private NoDupNumberProvider? provider;
 
-    public FormMain() => InitializeComponent();
+    public MainForm() => InitializeComponent();
 
     private async void button1_Click(object sender, EventArgs e) {
         if (!int.TryParse(startBox.Text, out var minValue) || !int.TryParse(endBox.Text, out var maxValue)) {

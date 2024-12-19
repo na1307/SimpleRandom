@@ -1,23 +1,23 @@
-namespace SimpleRandom.Forms;
+ï»¿namespace SimpleRandom.Forms;
 
-public partial class MainForm {
+public sealed partial class MainForm {
     private NoDupNumberProvider? provider;
 
     public MainForm() => InitializeComponent();
 
     private async void button1_Click(object sender, EventArgs e) {
         if (!int.TryParse(startBox.Text, out var minValue) || !int.TryParse(endBox.Text, out var maxValue)) {
-            ErrMsg("¼ıÀÚ°¡ ¾Æ´Ñ ¹®ÀÚ¿­À» ÀÔ·ÂÇß°Å³ª ¼ıÀÚ°¡ ³Ê¹« Å®´Ï´Ù.");
+            ErrMsg("ìˆ«ìê°€ ì•„ë‹Œ ë¬¸ìì—´ì„ ì…ë ¥í–ˆê±°ë‚˜ ìˆ«ìê°€ ë„ˆë¬´ í½ë‹ˆë‹¤.");
             return;
         }
 
         if (minValue < 0) {
-            ErrMsg("ÃÖ¼Ò°ªÀº À½¼öÀÏ ¼ö ¾ø½À´Ï´Ù.");
+            ErrMsg("ìµœì†Œê°’ì€ ìŒìˆ˜ì¼ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
         if (minValue > maxValue) {
-            ErrMsg("ÃÖ¼Ò°ªÀº ÃÖ´ë°ªº¸´Ù Å¬ ¼ö ¾ø½À´Ï´Ù.");
+            ErrMsg("ìµœì†Œê°’ì€ ìµœëŒ€ê°’ë³´ë‹¤ í´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -32,19 +32,23 @@ public partial class MainForm {
             }
 
             addNumber(Random.Shared.Next(minValue, maxValue));
-        } else if (provider == null || provider.Capacity != (maxValue - minValue)) {
-            await noDupInit();
+        } else if (provider == null || provider.Capacity != maxValue - minValue) {
+            noDupInit();
+            addNumber(await Task.Run(() => provider!.GetNumber()));
         } else {
             button1.Enabled = false;
-            numlabel.Text = "»Ì´Â Áß...";
+            numlabel.Text = "ë½‘ëŠ” ì¤‘...";
 
             try {
-                addNumber(await provider.GetNumber());
-            } catch (NothingToGetException) {
+                addNumber(await Task.Run(() => provider.GetNumber()));
+            } catch (InvalidOperationException) {
                 numlabel.Text = string.Empty;
 
-                if (MessageBox.Show("¸ğµç ¼ıÀÚ¸¦ »Ì¾Ò½À´Ï´Ù." + Environment.NewLine + Environment.NewLine + "Ã³À½ºÎÅÍ ´Ù½Ã ½ÃÀÛÇÒ±î¿ä?", "¾Ë¸²", MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
-                    await noDupInit();
+                if (MessageBox.Show($"ëª¨ë“  ìˆ«ìë¥¼ ë½‘ì•˜ìŠµë‹ˆë‹¤.{Environment.NewLine}{Environment.NewLine}ì²˜ìŒë¶€í„° ë‹¤ì‹œ ì‹œì‘í• ê¹Œìš”?", "ì•Œë¦¼",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) ==
+                    DialogResult.Yes) {
+                    noDupInit();
+                    addNumber(await Task.Run(() => provider!.GetNumber()));
                 }
             }
 
@@ -63,12 +67,11 @@ public partial class MainForm {
             }
         }
 
-        async Task noDupInit() {
+        void noDupInit() {
             listBox1.Items.Clear();
             provider = new(minValue, maxValue);
             progressBar1.Maximum = provider.Capacity;
             progressBar1.Value = 0;
-            addNumber(await provider.GetNumber());
         }
     }
 
@@ -81,6 +84,6 @@ public partial class MainForm {
     }
 
     private void textBox_TextChanged(object sender, EventArgs e) =>
-        // ÃÖ¼Ò°ª°ú ÃÖ´ë°ªÀÌ ¸ğµÎ ºñ¾îÀÖÁö ¾ÊÀ» ¶§¸¸
+        // ìµœì†Œê°’ê³¼ ìµœëŒ€ê°’ì´ ëª¨ë‘ ë¹„ì–´ìˆì§€ ì•Šì„ ë•Œë§Œ
         button1.Enabled = !string.IsNullOrWhiteSpace(startBox.Text) && !string.IsNullOrWhiteSpace(endBox.Text);
 }

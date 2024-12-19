@@ -3,9 +3,16 @@
 
 <PageTitle>숫자 뽑기</PageTitle>
 
-<p>최소값: <InputNumber TValue="int" @bind-Value="minValue" /></p>
-<p>최대값: <InputNumber TValue="int" @bind-Value="maxValue" /></p>
-<p><InputCheckbox @bind-Value="noDup" /> 중복 없음</p>
+<p>최소값:
+    <InputNumber TValue="int" @bind-Value="minValue"/>
+</p>
+<p>최대값:
+    <InputNumber TValue="int" @bind-Value="maxValue"/>
+</p>
+<p>
+    <InputCheckbox @bind-Value="noDup"/>
+    중복 없음
+</p>
 
 <div>
     @if (minValue > maxValue) {
@@ -22,7 +29,7 @@
 @code {
     private int minValue;
     private int maxValue;
-    private int? value = null;
+    private int? value;
     private bool noDup;
     private NoDupNumberProvider? provider;
 
@@ -36,21 +43,20 @@
         if (!noDup) {
             provider = null;
             value = Random.Shared.Next(minValue, maxValue2);
-        } else if (provider == null || provider.Capacity != (maxValue2 - minValue)) {
-            await noDupInit();
+        } else if (provider == null || provider.Capacity != maxValue2 - minValue) {
+            noDupInit();
+            value = await Task.Run(() => provider!.GetNumber());
         } else {
             try {
-                value = await provider.GetNumber();
-            } catch (NothingToGetException) {
-                if (await JSRuntime.InvokeAsync<bool>("confirm", "모든 숫자를 뽑았습니다." + Environment.NewLine + Environment.NewLine + "처음부터 다시 시작할까요?") == true) {
-                    await noDupInit();
+                value = await Task.Run(() => provider!.GetNumber());
+            } catch (InvalidOperationException) {
+                if (await JSRuntime.InvokeAsync<bool>("confirm", $"모든 숫자를 뽑았습니다.{Environment.NewLine}{Environment.NewLine}처음부터 다시 시작할까요?")) {
+                    noDupInit();
+                    value = await Task.Run(() => provider!.GetNumber());
                 }
             }
         }
 
-        async Task noDupInit() {
-            provider = new(minValue, maxValue2);
-            value = await provider!.GetNumber();
-        }
+        void noDupInit() => provider = new(minValue, maxValue2);
     }
 }

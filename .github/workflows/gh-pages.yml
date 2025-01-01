@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -40,11 +40,10 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }} #hash of project files
           restore-keys: ${{ runner.os }}-nuget-
       - name: Prepare Blazor WASM for GitHub Pages
-        uses: na1307/blazor-github-pages@v1
+        uses: na1307/blazor-github-pages@v3
         id: prepare
         with:
           project-path: SimpleRandom.Blazor/SimpleRandom.Blazor.csproj
-          fix-404: false
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
